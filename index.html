@@ -100,6 +100,7 @@
             filter: drop-shadow(0 6px 10px rgba(255, 77, 109, .35));
             color: #ff4d88;
             z-index: 2;
+            will-change: transform;
         }
 
         .progress-heart svg {
@@ -874,6 +875,26 @@
             window.addEventListener('load', () => updateProgress(0));
             window.addEventListener('resize', () => updateProgress(p));
         })();
+
+        let start = null;
+        function animateProgress(timestamp) {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / 3000, 1); // 3s chạy đầy
+            const val = Math.floor(progress * 100);
+            updateProgress(val);
+            if (val < 100) requestAnimationFrame(animateProgress);
+        }
+        requestAnimationFrame(animateProgress);
+        let trackWidth = track.offsetWidth;
+        window.addEventListener('resize', () => trackWidth = track.offsetWidth);
+
+        function updateProgress(val) {
+            fill.style.width = val + '%';
+            percentNum.textContent = val;
+            const moveDistance = trackWidth * (val / 100);
+            heart.style.transform = `translateX(${moveDistance}px) translateY(0)`;
+        }
+
     </script>
 
 
