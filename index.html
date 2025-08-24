@@ -79,7 +79,7 @@
             width: 0%;
             background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%);
             border-radius: 999px;
-            transition: width 120ms linear;
+            transition: width 120ms ease-out;
         }
 
         .progress-heart {
@@ -88,16 +88,25 @@
             left: 0;
             width: var(--heart-size);
             height: var(--heart-size);
-            will-change: transform;
             filter: drop-shadow(0 6px 10px rgba(255, 77, 109, .35));
             color: #ff4d88;
             z-index: 2;
+            /* Tối ưu hóa cho GPU acceleration */
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+            /* Smooth transition */
+            transition: transform 120ms ease-out;
+            will-change: transform;
         }
 
         .progress-heart svg {
             width: 100%;
             height: 100%;
             display: block;
+            /* Tối ưu hóa rendering */
+            shape-rendering: geometricPrecision;
+            transform: translateZ(0);
         }
 
         .percent {
@@ -308,35 +317,88 @@
             const fill = document.getElementById('progressFill');
             const heart = document.getElementById('progressHeart');
             const percentNum = document.getElementById('percentNum');
-            let trackWidth = fill.parentElement.offsetWidth;
+
+            // Cache track width và tính toán chính xác hơn
+            let trackWidth = 0;
+
+            function calculateTrackWidth() {
+                const track = fill.parentElement;
+                trackWidth = track.offsetWidth;
+            }
+
+            // Tính toán ban đầu
+            calculateTrackWidth();
+
+            // Recalculate on resize với debounce
+            let resizeTimeout;
             window.addEventListener('resize', () => {
-                trackWidth = fill.parentElement.offsetWidth;
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(calculateTrackWidth, 100);
             });
 
+            // Smooth progress update với requestAnimationFrame
+            let currentProgress = 0;
+            let targetProgress = 0;
+
             function updateProgress(val) {
+                targetProgress = val;
+                percentNum.textContent = Math.round(val);
                 fill.style.width = val + '%';
-                percentNum.textContent = val;
+
+                // Smooth heart movement
                 const moveDistance = trackWidth * (val / 100);
-                heart.style.transform = `translateX(${moveDistance}px)`;
+                // Sử dụng transform3d để tối ưu GPU acceleration
+                heart.style.transform = `translate3d(${moveDistance}px, 0, 0)`;
+            }
+
+            // Smooth animation với easing
+            function smoothProgress() {
+                const diff = targetProgress - currentProgress;
+                const step = diff * 0.1; // Smooth easing
+
+                if (Math.abs(diff) > 0.01) {
+                    currentProgress += step;
+                    updateProgress(currentProgress);
+                    requestAnimationFrame(smoothProgress);
+                } else {
+                    currentProgress = targetProgress;
+                    updateProgress(currentProgress);
+                }
             }
 
             let start = null;
+            let lastTime = 0;
+            const FRAME_RATE = 60; // Target 60fps
+            const FRAME_INTERVAL = 1000 / FRAME_RATE;
+
             function animateProgress(timestamp) {
                 if (!start) start = timestamp;
-                const progress = Math.min((timestamp - start) / 6000, 1);
-                const val = Math.floor(progress * 100);
-                updateProgress(val);
-                if (val < 100) {
+
+                // Throttle updates để tránh spam
+                if (timestamp - lastTime >= FRAME_INTERVAL) {
+                    const progress = Math.min((timestamp - start) / 6000, 1);
+                    const val = Math.floor(progress * 100);
+                    updateProgress(val);
+                    lastTime = timestamp;
+                }
+
+                if (targetProgress < 100) {
                     requestAnimationFrame(animateProgress);
                 } else {
-                    loader.classList.add('hidden');
-                    setTimeout(() => { loader.style.display = 'none'; }, 650);
-                    scene.hidden = false;
-                    requestAnimationFrame(() => scene.classList.add('show'));
-                    document.body.style.overflow = 'auto';
-                    startHeartRain();
+                    // Hoàn thành loading
+                    setTimeout(() => {
+                        loader.classList.add('hidden');
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                        }, 650);
+                        scene.hidden = false;
+                        requestAnimationFrame(() => scene.classList.add('show'));
+                        document.body.style.overflow = 'auto';
+                        startHeartRain();
+                    }, 200);
                 }
             }
+
             requestAnimationFrame(animateProgress);
 
             // Heart rain
@@ -344,6 +406,7 @@
                 const rain = document.querySelector('.heart-rain');
                 if (!rain) return;
                 const DENSITY = 10, TICK = 120, MAX = 300;
+
                 function createDrop() {
                     const drop = document.createElement('div');
                     drop.className = 'drop';
@@ -361,6 +424,7 @@
                     drop.addEventListener('animationend', () => drop.remove());
                     if (rain.childElementCount > MAX) rain.firstChild?.remove();
                 }
+
                 setInterval(() => {
                     for (let i = 0; i < DENSITY; i++) createDrop();
                 }, TICK);
