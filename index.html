@@ -2,178 +2,180 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tặng Em</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle at 50% 40%, #fff 0%, #ffe6ef 45%, #ffd1e2 100%);
-            font-family: "Segoe UI", sans-serif;
-            color: #b51453;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tặng Em</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at 50% 40%, #fff 0%, #ffe6ef 45%, #ffd1e2 100%);
+      font-family: "Segoe UI", sans-serif;
+      color: #b51453;
+    }
 
-        .heart-container {
-            margin-bottom: 30px;
-            cursor: pointer;
-        }
+    .heart-container {
+      margin-bottom: 30px;
+      cursor: pointer;
+    }
 
-        .heart-svg {
-            width: 180px;
-            height: 180px;
-            filter: drop-shadow(0 10px 20px rgba(255, 77, 119, 0.3));
-        }
+    .heart-svg {
+      width: 180px;
+      height: 180px;
+      filter: drop-shadow(0 10px 20px rgba(255, 77, 119, 0.3));
+      transition: width 0.3s, height 0.3s;
+    }
 
-        .heart-path {
-            fill: url(#heartGradient);
-            stroke: #ff1744;
-            stroke-width: 2;
-            animation: heartbeat 2s ease-in-out infinite;
-            transform-origin: center;
-        }
+    /* Responsive: nhỏ hơn màn hình 480px thì tim thu nhỏ */
+    @media (max-width: 480px) {
+      .heart-svg {
+        width: 120px;
+        height: 120px;
+      }
+      .line {
+        font-size: 18px;
+      }
+    }
 
-        @keyframes heartbeat {
+    .heart-path {
+      fill: url(#heartGradient);
+      stroke: #ff1744;
+      stroke-width: 2;
+      animation: heartbeat 2s ease-in-out infinite;
+      transform-origin: center;
+    }
 
-            0%,
-            100% {
-                transform: scale(1);
-            }
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      25% {
+        transform: scale(1.05);
+      }
+      50% {
+        transform: scale(1.15);
+      }
+      75% {
+        transform: scale(1.05);
+      }
+    }
 
-            25% {
-                transform: scale(1.05);
-            }
+    .lines {
+      text-align: center;
+      max-width: 600px;
+      padding: 0 20px;
+      margin-top: 20px;
+      color: #ff80ab;
+    }
 
-            50% {
-                transform: scale(1.15);
-            }
+    .line {
+      font-size: 22px;
+      margin: 15px 0;
+      white-space: pre-wrap;
+      font-weight: 500;
+      line-height: 1.4;
+    }
 
-            75% {
-                transform: scale(1.05);
-            }
-        }
+    .char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+    }
 
-        /* TEXT */
-        .lines {
-            text-align: center;
-            max-width: 600px;
-            padding: 0 20px;
-            margin-top: 20px;
-            color: #ff80ab;
-        }
+    .char.in {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity .4s, transform .4s;
+    }
 
-        .line {
-            font-size: 22px;
-            margin: 15px 0;
-            white-space: pre-wrap;
-            font-weight: 500;
-            line-height: 1.4;
-        }
-
-        .char {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .char.in {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity .4s, transform .4s;
-        }
-
-        .hint {
-            font-size: 14px;
-            opacity: 0.7;
-            margin-top: 10px;
-        }
-    </style>
+    .hint {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Audio -->
-    <audio id="bg-music" loop>
-        <source
-            src="https://ia800202.us.archive.org/31/items/Freestyle-WhypleaseTellMeWhy/Freestyle-PleaseTellMeWhy-kr.mp3"
-            type="audio/mpeg">
-    </audio>
+  <!-- Audio -->
+  <audio id="bg-music" preload="auto">
+    <source
+      src="https://ia800202.us.archive.org/31/items/Freestyle-WhypleaseTellMeWhy/Freestyle-PleaseTellMeWhy-kr.mp3"
+      type="audio/mpeg">
+  </audio>
 
-    <!-- Heart -->
-    <div class="heart-container">
-        <svg class="heart-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#ff4081" />
-                    <stop offset="50%" style="stop-color:#ff1744" />
-                    <stop offset="100%" style="stop-color:#ad1457" />
-                </linearGradient>
-            </defs>
-            <path class="heart-path"
-                d="M100,180 C100,180 20,120 20,80 C20,50 40,30 70,30 C85,30 95,40 100,50 C105,40 115,30 130,30 C160,30 180,50 180,80 C180,120 100,180 100,180 Z" />
-        </svg>
-    </div>
+  <!-- Heart -->
+  <div class="heart-container">
+    <svg class="heart-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ff4081" />
+          <stop offset="50%" style="stop-color:#ff1744" />
+          <stop offset="100%" style="stop-color:#ad1457" />
+        </linearGradient>
+      </defs>
+      <path class="heart-path"
+        d="M100,180 C100,180 20,120 20,80 C20,50 40,30 70,30 C85,30 95,40 100,50 C105,40 115,30 130,30 C160,30 180,50 180,80 C180,120 100,180 100,180 Z" />
+    </svg>
+  </div>
 
-    <p class="hint" id="hint">💡 Chạm vào trái tim</p>
-    <div class="lines" id="lines"></div>
+  <p class="hint" id="hint">💡 Chạm vào trái tim</p>
+  <div class="lines" id="lines"></div>
 
-    <script>
-        const lines = [
-            "Anh không hứa sẽ cho em tất cả thế giới.",
-            "Nhưng anh hứa sẽ cho em tất cả những gì thuộc về anh.",
-            "Xin lỗi vì đã làm em buồn nhiều",
-            "Yêu em nhiều!"
-        ];
+  <script>
+    const lines = [
+      "Anh không hứa sẽ cho em tất cả thế giới.",
+      "Nhưng anh hứa sẽ cho em tất cả những gì thuộc về anh.",
+      "Xin lỗi vì đã làm em buồn nhiều",
+      "Yêu em nhiều!"
+    ];
 
-        const charDelay = 60;   // ms giữa các chữ
-        const linePause = 1000; // ms nghỉ sau khi xong 1 dòng
+    const charDelay = 60;   // ms giữa các chữ
+    const linePause = 1000; // ms nghỉ sau khi xong 1 dòng
 
-        const container = document.getElementById("lines");
-        const music = document.getElementById("bg-music");
-        const heart = document.querySelector(".heart-container");
-        const hint = document.getElementById("hint");
+    const container = document.getElementById("lines");
+    const music = document.getElementById("bg-music");
+    const heart = document.querySelector(".heart-container");
+    const hint = document.getElementById("hint");
 
-        async function showLines() {
-            for (let text of lines) {
-                const p = document.createElement("p");
-                p.className = "line";
-                container.appendChild(p);
+    async function showLines() {
+      for (let text of lines) {
+        const p = document.createElement("p");
+        p.className = "line";
+        container.appendChild(p);
 
-                const chars = [...text].map(ch => {
-                    const span = document.createElement("span");
-                    span.className = ch === ' ' ? "char space" : "char";
-                    span.textContent = ch;
-                    p.appendChild(span);
-                    return span;
-                });
-
-                for (let i = 0; i < chars.length; i++) {
-                    await new Promise(r => setTimeout(r, charDelay));
-                    chars[i].classList.add("in");
-                }
-                await new Promise(r => setTimeout(r, linePause));
-            }
-        }
-
-        heart.addEventListener("click", async function () {
-            // ẩn gợi ý
-            hint.style.display = "none";
-
-            // phát nhạc từ giây 29
-            try {
-                music.currentTime = 29;
-                await music.play();
-            } catch (e) {
-                console.log("Phát nhạc thất bại:", e);
-            }
-
-            // bắt đầu chạy text
-            showLines();
+        const chars = [...text].map(ch => {
+          const span = document.createElement("span");
+          span.className = ch === ' ' ? "char space" : "char";
+          span.textContent = ch;
+          p.appendChild(span);
+          return span;
         });
-    </script>
+
+        for (let i = 0; i < chars.length; i++) {
+          await new Promise(r => setTimeout(r, charDelay));
+          chars[i].classList.add("in");
+        }
+        await new Promise(r => setTimeout(r, linePause));
+      }
+    }
+
+    heart.addEventListener("click", async function () {
+      hint.style.display = "none";
+      try {
+        // nhảy tới giây 29 rồi play
+        music.currentTime = 29;
+        await music.play();
+      } catch (e) {
+        console.log("Phát nhạc thất bại:", e);
+      }
+      showLines();
+    });
+  </script>
 </body>
 
 </html>
