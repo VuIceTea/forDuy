@@ -4,432 +4,175 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tặng TDi</title>
+    <title>Tặng Em ❤️</title>
     <style>
-        :root {
-            --accent: #ff4d6d;
-            --accent-2: #ff6b8a;
-            --bg: radial-gradient(1200px 800px at 50% 40%, #fff 0%, #fbe9ef 45%, #ffd6e4 100%);
-            --bar-h: 16px;
-            --heart-size: 28px;
-        }
-
         body {
             margin: 0;
-            min-height: 100vh;
-            background: var(--bg);
-            font-family: system-ui, sans-serif;
-            color: #c2185b;
-            overflow: hidden;
-        }
-
-        /* ========= LOADER ========= */
-        .loader {
-            position: fixed;
-            inset: 0;
-            display: grid;
-            place-items: center;
-            background: linear-gradient(180deg, #fff 0%, #ffe6eb 100%);
-            z-index: 10;
-            transition: opacity .6s ease, visibility .6s ease;
-        }
-
-        .loader-inner {
-            width: min(92vw, 550px);
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            gap: 18px;
-            align-items: stretch;
-            padding: 28px 24px;
-            border-radius: 20px;
-            background: #ffffffcc;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .08), 0 2px 10px rgba(0, 0, 0, .05);
-            backdrop-filter: blur(4px);
-        }
-
-        .title {
-            font-weight: 700;
-            font-size: clamp(18px, 2.5vw, 22px);
-            color: #ff4d88;
-            text-align: center;
-        }
-
-        .progress-wrap {
-            position: relative;
-            width: 100%;
-            height: calc(var(--bar-h) + 18px + var(--heart-size));
-            padding-top: 6px;
-            padding-inline: calc(var(--heart-size) / 2);
-        }
-
-        .progress-track {
-            position: absolute;
-            left: calc(var(--heart-size) / 2);
-            right: calc(var(--heart-size) / 2);
-            top: calc(var(--heart-size) + 12px);
-            height: var(--bar-h);
-            background: #ffe0ea;
-            border-radius: 999px;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, .06);
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%);
-            border-radius: 999px;
-            transition: width 120ms ease-out;
-        }
-
-        .progress-heart {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: var(--heart-size);
-            height: var(--heart-size);
-            filter: drop-shadow(0 6px 10px rgba(255, 77, 109, .35));
-            color: #ff4d88;
-            z-index: 2;
-            /* Tối ưu hóa cho GPU acceleration */
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            perspective: 1000px;
-            /* Smooth transition */
-            transition: transform 120ms ease-out;
-            will-change: transform;
-        }
-
-        .progress-heart svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-            /* Tối ưu hóa rendering */
-            shape-rendering: geometricPrecision;
-            transform: translateZ(0);
-        }
-
-        .percent {
-            position: absolute;
-            top: calc(var(--heart-size) + var(--bar-h) + 18px);
-            left: 50%;
-            transform: translateX(-50%);
-            font-weight: 600;
-            color: #ff4d88;
-        }
-
-        .loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        /* ========= SCENE ========= */
-        .scene {
-            position: fixed;
-            inset: 0;
-            display: grid;
-            place-items: center;
-            opacity: 0;
-            transform: translateY(8px);
-            transition: opacity .6s ease .15s, transform .6s ease .15s;
-        }
-
-        .scene.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .wrap {
-            position: relative;
-            display: grid;
-            place-items: center;
-            gap: 24px;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at 50% 40%, #fff 0%, #ffe6ef 45%, #ffd1e2 100%);
+            font-family: "Segoe UI", sans-serif;
+            color: #b51453;
         }
 
         .heart-container {
-            position: relative;
-            width: clamp(250px, 65vw, 400px);
-            height: clamp(220px, 60vw, 360px);
-            z-index: 1;
-            animation: heartFloat 3s ease-in-out infinite;
+            margin-bottom: 30px;
+            cursor: pointer;
         }
 
-        @keyframes heartFloat {
+        .heart-svg {
+            width: 180px;
+            height: 180px;
+            filter: drop-shadow(0 10px 20px rgba(255, 77, 119, 0.3));
+        }
+
+        .heart-path {
+            fill: url(#heartGradient);
+            stroke: #ff1744;
+            stroke-width: 2;
+            animation: heartbeat 2s ease-in-out infinite;
+            transform-origin: center;
+        }
+
+        @keyframes heartbeat {
 
             0%,
             100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-6px);
-            }
-        }
-
-        .heart-3d {
-            width: 100%;
-            height: 100%;
-            display: block;
-            filter: drop-shadow(0 20px 40px rgba(255, 77, 109, 0.3));
-            animation: beat3d 1.2s ease-in-out infinite;
-        }
-
-        @keyframes beat3d {
-            0% {
                 transform: scale(1);
             }
 
-            30% {
-                transform: scale(1.12);
-            }
-
-            60% {
+            25% {
                 transform: scale(1.05);
             }
 
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .message {
-            font-weight: 700;
-            font-size: clamp(24px, 5vw, 38px);
-            color: #ff4d88;
-            text-align: center;
-            animation: messageGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes messageGlow {
-
-            0%,
-            100% {
-                text-shadow: 0 0 20px rgba(194, 24, 91, 0.3);
-            }
-
             50% {
-                text-shadow: 0 0 30px rgba(194, 24, 91, 0.6);
+                transform: scale(1.15);
+            }
+
+            75% {
+                transform: scale(1.05);
             }
         }
 
-        /* ===== Mưa tim ===== */
-        .heart-rain {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 8;
+        /* TEXT */
+        .lines {
+            text-align: center;
+            max-width: 600px;
+            padding: 0 20px;
+            margin-top: 20px;
+            color: #ff80ab;
         }
 
-        .heart-rain .drop {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            will-change: transform, opacity;
-            opacity: 0.9;
-            animation: fall var(--dur, 4s) linear forwards;
-            filter: drop-shadow(0 4px 8px rgba(255, 77, 109, 0.35));
+        .line {
+            font-size: 22px;
+            margin: 15px 0;
+            white-space: pre-wrap;
+            font-weight: 500;
+            line-height: 1.4;
         }
 
-        @keyframes fall {
-            0% {
-                opacity: 1;
-                transform: translate3d(0, -40px, 0) rotate(var(--rotStart, 0deg));
-            }
+        .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-            100% {
-                opacity: 0;
-                transform: translate3d(var(--drift, 0px), 120vh, 0) rotate(var(--rotEnd, 360deg));
-            }
+        .char.in {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity .4s, transform .4s;
+        }
+
+        .hint {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
-    <!-- LOADING -->
-    <div class="loader" id="loader">
-        <div class="loader-inner">
-            <div class="title">Đang chuẩn bị điều bất ngờ cho Nhi... 💞</div>
-            <div class="progress-wrap">
-                <div class="progress-heart" id="progressHeart">
-                    <svg viewBox="0 0 24 24">
-                        <path fill="currentColor"
-                            d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5 2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.04L12,21.35Z" />
-                    </svg>
-                </div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="percent"><span id="percentNum">0</span>%</div>
-            </div>
-        </div>
+    <!-- Audio -->
+    <audio id="bg-music" loop>
+        <source
+            src="https://ia800202.us.archive.org/31/items/Freestyle-WhypleaseTellMeWhy/Freestyle-PleaseTellMeWhy-kr.mp3"
+            type="audio/mpeg">
+    </audio>
+
+    <!-- Heart -->
+    <div class="heart-container">
+        <svg class="heart-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ff4081" />
+                    <stop offset="50%" style="stop-color:#ff1744" />
+                    <stop offset="100%" style="stop-color:#ad1457" />
+                </linearGradient>
+            </defs>
+            <path class="heart-path"
+                d="M100,180 C100,180 20,120 20,80 C20,50 40,30 70,30 C85,30 95,40 100,50 C105,40 115,30 130,30 C160,30 180,50 180,80 C180,120 100,180 100,180 Z" />
+        </svg>
     </div>
-    <div class="heart-rain"></div>
 
-    <!-- SCENE -->
-    <main class="scene" id="scene" hidden>
-        <div class="wrap">
-            <div class="heart-container">
-                <!-- Heart SVG -->
-                <svg class="heart-3d" viewBox="0 0 24 24">
-                    <defs>
-                        <linearGradient id="heartMainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#ff9bb5" />
-                            <stop offset="25%" stop-color="#ff7a9a" />
-                            <stop offset="50%" stop-color="#ff4d6d" />
-                            <stop offset="75%" stop-color="#e43a57" />
-                            <stop offset="100%" stop-color="#c2185b" />
-                        </linearGradient>
-
-                        <radialGradient id="heartHighlight" cx="30%" cy="25%" r="50%">
-                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
-                            <stop offset="40%" stop-color="#ffffff" stop-opacity="0.4" />
-                            <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
-                        </radialGradient>
-
-                        <radialGradient id="innerGlow" cx="50%" cy="60%" r="60%">
-                            <stop offset="0%" stop-color="#ffb6c1" stop-opacity="0.6" />
-                            <stop offset="70%" stop-color="#ff4d6d" stop-opacity="0.3" />
-                            <stop offset="100%" stop-color="#ff4d6d" stop-opacity="0" />
-                        </radialGradient>
-                    </defs>
-
-                    <path
-                        d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5 2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.04L12,21.35Z"
-                        fill="url(#heartMainGrad)" />
-                    <path
-                        d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5 2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.04L12,21.35Z"
-                        fill="url(#innerGlow)" />
-                    <ellipse cx="9" cy="7.5" rx="3.5" ry="2.8" fill="url(#heartHighlight)" />
-                    <ellipse cx="15" cy="7.5" rx="3.5" ry="2.8" fill="url(#heartHighlight)" />
-                    <circle cx="8.5" cy="6.8" r="1.2" fill="#fff" />
-                    <circle cx="15.5" cy="6.8" r="1.2" fill="#fff" />
-                </svg>
-            </div>
-            <div class="message">Tặng Nhi Nè ❤️</div>
-        </div>
-    </main>
+    <p class="hint" id="hint">💡 Chạm vào trái tim</p>
+    <div class="lines" id="lines"></div>
 
     <script>
-        (function () {
-            const loader = document.getElementById('loader');
-            const scene = document.getElementById('scene');
-            const fill = document.getElementById('progressFill');
-            const heart = document.getElementById('progressHeart');
-            const percentNum = document.getElementById('percentNum');
+        const lines = [
+            "Anh không hứa sẽ cho em tất cả thế giới.",
+            "Nhưng anh hứa sẽ cho em tất cả những gì thuộc về anh.",
+            "Xin lỗi vì đã làm em buồn nhiều",
+            "Yêu em nhiều!"
+        ];
 
-            // Cache track width và tính toán chính xác hơn
-            let trackWidth = 0;
+        const charDelay = 60;   // ms giữa các chữ
+        const linePause = 1000; // ms nghỉ sau khi xong 1 dòng
 
-            function calculateTrackWidth() {
-                const track = fill.parentElement;
-                trackWidth = track.offsetWidth;
-            }
+        const container = document.getElementById("lines");
+        const music = document.getElementById("bg-music");
+        const heart = document.querySelector(".heart-container");
+        const hint = document.getElementById("hint");
 
-            // Tính toán ban đầu
-            calculateTrackWidth();
+        async function showLines() {
+            for (let text of lines) {
+                const p = document.createElement("p");
+                p.className = "line";
+                container.appendChild(p);
 
-            // Recalculate on resize với debounce
-            let resizeTimeout;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(calculateTrackWidth, 100);
-            });
+                const chars = [...text].map(ch => {
+                    const span = document.createElement("span");
+                    span.className = ch === ' ' ? "char space" : "char";
+                    span.textContent = ch;
+                    p.appendChild(span);
+                    return span;
+                });
 
-            // Smooth progress update với requestAnimationFrame
-            let currentProgress = 0;
-            let targetProgress = 0;
-
-            function updateProgress(val) {
-                targetProgress = val;
-                percentNum.textContent = Math.round(val);
-                fill.style.width = val + '%';
-
-                // Smooth heart movement
-                const moveDistance = trackWidth * (val / 100);
-                // Sử dụng transform3d để tối ưu GPU acceleration
-                heart.style.transform = `translate3d(${moveDistance}px, 0, 0)`;
-            }
-
-            // Smooth animation với easing
-            function smoothProgress() {
-                const diff = targetProgress - currentProgress;
-                const step = diff * 0.1; // Smooth easing
-
-                if (Math.abs(diff) > 0.01) {
-                    currentProgress += step;
-                    updateProgress(currentProgress);
-                    requestAnimationFrame(smoothProgress);
-                } else {
-                    currentProgress = targetProgress;
-                    updateProgress(currentProgress);
+                for (let i = 0; i < chars.length; i++) {
+                    await new Promise(r => setTimeout(r, charDelay));
+                    chars[i].classList.add("in");
                 }
+                await new Promise(r => setTimeout(r, linePause));
+            }
+        }
+
+        heart.addEventListener("click", async function () {
+            // ẩn gợi ý
+            hint.style.display = "none";
+
+            // phát nhạc từ giây 29
+            try {
+                music.currentTime = 29;
+                await music.play();
+            } catch (e) {
+                console.log("Phát nhạc thất bại:", e);
             }
 
-            let start = null;
-            let lastTime = 0;
-            const FRAME_RATE = 60; // Target 60fps
-            const FRAME_INTERVAL = 1000 / FRAME_RATE;
-
-            function animateProgress(timestamp) {
-                if (!start) start = timestamp;
-
-                // Throttle updates để tránh spam
-                if (timestamp - lastTime >= FRAME_INTERVAL) {
-                    const progress = Math.min((timestamp - start) / 6000, 1);
-                    const val = Math.floor(progress * 100);
-                    updateProgress(val);
-                    lastTime = timestamp;
-                }
-
-                if (targetProgress < 100) {
-                    requestAnimationFrame(animateProgress);
-                } else {
-                    // Hoàn thành loading
-                    setTimeout(() => {
-                        loader.classList.add('hidden');
-                        setTimeout(() => {
-                            loader.style.display = 'none';
-                        }, 650);
-                        scene.hidden = false;
-                        requestAnimationFrame(() => scene.classList.add('show'));
-                        document.body.style.overflow = 'auto';
-                        startHeartRain();
-                    }, 200);
-                }
-            }
-
-            requestAnimationFrame(animateProgress);
-
-            // Heart rain
-            function startHeartRain() {
-                const rain = document.querySelector('.heart-rain');
-                if (!rain) return;
-                const DENSITY = 10, TICK = 120, MAX = 300;
-
-                function createDrop() {
-                    const drop = document.createElement('div');
-                    drop.className = 'drop';
-                    drop.textContent = '❤️';
-                    const vw = window.innerWidth;
-                    drop.style.left = (Math.random() * vw) + 'px';
-                    const size = 14 + Math.random() * 24;
-                    drop.style.fontSize = size + 'px';
-                    drop.style.setProperty('--dur', (3 + Math.random() * 3) + 's');
-                    const drift = (Math.random() < 0.5 ? -1 : 1) * (vw * (0.2 + Math.random() * 0.4));
-                    drop.style.setProperty('--drift', drift + 'px');
-                    drop.style.setProperty('--rotStart', (Math.random() * 120 - 60) + 'deg');
-                    drop.style.setProperty('--rotEnd', (360 + Math.random() * 720) + 'deg');
-                    rain.appendChild(drop);
-                    drop.addEventListener('animationend', () => drop.remove());
-                    if (rain.childElementCount > MAX) rain.firstChild?.remove();
-                }
-
-                setInterval(() => {
-                    for (let i = 0; i < DENSITY; i++) createDrop();
-                }, TICK);
-            }
-        })();
+            // bắt đầu chạy text
+            showLines();
+        });
     </script>
 </body>
 
