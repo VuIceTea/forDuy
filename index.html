@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tặng Em</title>
+  <title>Tặng Tú</title>
   <style>
     body {
       margin: 0;
@@ -30,7 +30,6 @@
       transition: width 0.3s, height 0.3s;
     }
 
-    /* Responsive: nhỏ hơn màn hình 480px thì tim thu nhỏ */
     @media (max-width: 480px) {
       .heart-svg {
         width: 120px;
@@ -101,6 +100,9 @@
 </head>
 
 <body>
+  <!-- Tiêu đề -->
+  <h1 style="color:#ff4081; margin-bottom:20px;">Tặng Tú</h1>
+
   <!-- Audio -->
   <audio id="bg-music" preload="auto">
     <source
@@ -134,8 +136,8 @@
       "Yêu em nhiều!"
     ];
 
-    const charDelay = 60;   // ms giữa các chữ
-    const linePause = 1000; // ms nghỉ sau khi xong 1 dòng
+    const charDelay = 60;
+    const linePause = 1000;
 
     const container = document.getElementById("lines");
     const music = document.getElementById("bg-music");
@@ -167,7 +169,6 @@
     heart.addEventListener("click", async function () {
       hint.style.display = "none";
       try {
-        // nhảy tới giây 29 rồi play
         music.currentTime = 29;
         await music.play();
       } catch (e) {
